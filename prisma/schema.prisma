@@ -1,0 +1,173 @@
+// Copyright (c) 2026 LinkedFlow Technologies
+// Licensed under the Business Source License 1.1
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// CORE ENTITIES
+// ============================================================================
+
+model Organization {
+  id         String   @id @default(cuid())
+  name       String
+  domain     String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Relations
+  users              User[]
+  linkedin_accounts  LinkedInAccount[]
+  campaigns          Campaign[]
+
+  @@map("organizations")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  password_hash   String
+  first_name      String
+  last_name       String
+  role            String   // UserRole enum
+  organization_id String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  organization      Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  created_campaigns Campaign[]   @relation("CampaignCreatedBy")
+
+  @@map("users")
+}
+
+model LinkedInAccount {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  encrypted_cookies     String
+  encrypted_totp_secret String?
+  proxy_ip              String
+  account_type          String    // LinkedInAccountType enum
+  status                String    // AccountStatus enum
+  actions_today         Int       @default(0)
+  connections_today     Int       @default(0)
+  messages_today        Int       @default(0)
+  views_today           Int       @default(0)
+  last_action_at        DateTime?
+  daily_reset_at        DateTime  @default(now())
+  warmup_day            Int       @default(1)
+  organization_id       String
+  created_at            DateTime  @default(now())
+  updated_at            DateTime  @updatedAt
+
+  // Relations
+  organization Organization @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  assigned_leads Lead[]      @relation("AssignedAccount")
+  action_logs    ActionLog[]
+
+  @@map("linkedin_accounts")
+}
+
+model Lead {
+  id                  String    @id @default(cuid())
+  first_name          String
+  last_name           String
+  email               String?
+  linkedin_url        String    @unique
+  company             String?
+  title               String?
+  location            String?
+  status              String    // LeadStatus enum
+  source              String    // LeadSource enum
+  campaign_id         String?
+  assigned_account_id String?
+  notes               String?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  // Relations
+  campaign         Campaign?        @relation(fields: [campaign_id], references: [id], onDelete: SetNull)
+  assigned_account LinkedInAccount? @relation("AssignedAccount", fields: [assigned_account_id], references: [id], onDelete: SetNull)
+  action_logs      ActionLog[]
+
+  @@map("leads")
+}
+
+model Campaign {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  status          String   // CampaignStatus enum
+  organization_id String
+  created_by      String
+  total_leads     Int      @default(0)
+  completed_leads Int      @default(0)
+  active_leads    Int      @default(0)
+  replied_leads   Int      @default(0)
+  connected_leads Int      @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  // Relations
+  organization     Organization   @relation(fields: [organization_id], references: [id], onDelete: Cascade)
+  created_by_user  User           @relation("CampaignCreatedBy", fields: [created_by], references: [id])
+  steps            CampaignStep[]
+  leads            Lead[]
+
+  @@map("campaigns")
+}
+
+model CampaignStep {
+  id               String   @id @default(cuid())
+  campaign_id      String
+  step_order       Int
+  action_type      String   // ActionType enum
+  delay_minutes    Int
+  message_template String?
+  condition        String?  // StepCondition enum
+  condition_value  String?
+  is_active        Boolean  @default(true)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  // Relations
+  campaign    Campaign    @relation(fields: [campaign_id], references: [id], onDelete: Cascade)
+  action_logs ActionLog[]
+
+  @@unique([campaign_id, step_order])
+  @@map("campaign_steps")
+}
+
+model ActionLog {
+  id                  String    @id @default(cuid())
+  lead_id             String
+  campaign_step_id    String?
+  linkedin_account_id String
+  action_type         String    // ActionType enum
+  status              String    // ActionLogStatus enum
+  scheduled_at        DateTime
+  executed_at         DateTime?
+  error_message       String?
+  metadata            String?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+
+  // Relations
+  lead             Lead             @relation(fields: [lead_id], references: [id], onDelete: Cascade)
+  campaign_step    CampaignStep?    @relation(fields: [campaign_step_id], references: [id], onDelete: SetNull)
+  linkedin_account LinkedInAccount @relation(fields: [linkedin_account_id], references: [id], onDelete: Cascade)
+
+  @@map("action_logs")
+}
+
+// ============================================================================
+// INDEXES FOR PERFORMANCE
+// ============================================================================
+
+// Indexes are defined within each model above

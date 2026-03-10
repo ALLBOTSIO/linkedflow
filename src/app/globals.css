@@ -1,0 +1,368 @@
+/**
+ * Copyright (c) 2026 Tattoo Ideas Generator
+ * Licensed under the Business Source License 1.1
+ * You may not use this file except in compliance with the License.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 271.5 81.3% 55.9%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 271.5 81.3% 55.9%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 271.5 81.3% 55.9%;
+    --radius: 0.75rem;
+
+    /* Tattoo theme colors */
+    --tattoo-purple: 271.5 81.3% 55.9%;
+    --tattoo-pink: 320 65% 60%;
+    --tattoo-dark: 222.2 84% 4.9%;
+    --tattoo-darker: 222.2 84% 2%;
+    --tattoo-light: 210 40% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-slate-900 text-white font-inter overflow-x-hidden;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer components {
+  .font-creepster {
+    font-family: 'Creepster', cursive;
+  }
+
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Button Components */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-slate-900;
+  }
+
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 h-11 py-2 px-6;
+  }
+
+  .btn-secondary {
+    @apply btn bg-slate-800 text-purple-200 hover:bg-slate-700 border border-purple-500/30 hover:border-purple-400/50 h-11 py-2 px-6;
+  }
+
+  .btn-ghost {
+    @apply btn text-purple-200 hover:bg-purple-900/30 hover:text-white h-11 py-2 px-6;
+  }
+
+  .btn-outline {
+    @apply btn border border-purple-400/50 text-purple-200 hover:bg-purple-900/30 hover:text-white hover:border-purple-400 h-11 py-2 px-6;
+  }
+
+  .btn-destructive {
+    @apply btn bg-red-600 text-white hover:bg-red-700 h-11 py-2 px-6;
+  }
+
+  /* Card Components */
+  .card {
+    @apply rounded-xl bg-slate-800/50 backdrop-blur-sm border border-purple-300/20 shadow-lg hover:border-purple-400/40 transition-all duration-300;
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-slate-800/80 to-purple-900/40 backdrop-blur-sm border border-purple-300/20;
+  }
+
+  /* Input Components */
+  .input {
+    @apply flex h-11 w-full rounded-lg border border-purple-300/30 bg-slate-800/50 backdrop-blur-sm px-4 py-2 text-white placeholder:text-purple-300/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:border-purple-400 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200;
+  }
+
+  .textarea {
+    @apply flex min-h-[80px] w-full rounded-lg border border-purple-300/30 bg-slate-800/50 backdrop-blur-sm px-4 py-3 text-white placeholder:text-purple-300/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:border-purple-400 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 resize-none;
+  }
+
+  .select {
+    @apply flex h-11 w-full items-center justify-between rounded-lg border border-purple-300/30 bg-slate-800/50 backdrop-blur-sm px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200;
+  }
+
+  /* Badge Components */
+  .badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-medium transition-colors;
+  }
+
+  .badge-primary {
+    @apply badge bg-purple-600/30 text-purple-200 border border-purple-500/30;
+  }
+
+  .badge-secondary {
+    @apply badge bg-pink-600/30 text-pink-200 border border-pink-500/30;
+  }
+
+  .badge-success {
+    @apply badge bg-green-600/30 text-green-200 border border-green-500/30;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-600/30 text-yellow-200 border border-yellow-500/30;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-600/30 text-red-200 border border-red-500/30;
+  }
+
+  /* Loading Components */
+  .loading-spinner {
+    @apply animate-spin rounded-full h-5 w-5 border-2 border-purple-300/30 border-t-purple-400;
+  }
+
+  .loading-skeleton {
+    @apply animate-pulse bg-slate-700/50 rounded-lg;
+  }
+
+  /* Design Grid */
+  .design-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+  }
+
+  .design-card {
+    @apply card overflow-hidden group cursor-pointer transform hover:scale-[1.02] transition-all duration-300;
+  }
+
+  .design-card:hover {
+    @apply shadow-2xl shadow-purple-500/20;
+  }
+
+  /* Tattoo specific styles */
+  .tattoo-border {
+    @apply border-2 border-purple-400/30 rounded-lg;
+  }
+
+  .tattoo-glow {
+    @apply shadow-lg shadow-purple-500/20;
+  }
+
+  .tattoo-text-glow {
+    text-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+  }
+
+  .tattoo-bg-pattern {
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  .animate-bounce-in {
+    animation: bounceIn 0.6s ease-out;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  /* Glassmorphism effect */
+  .glass {
+    @apply bg-white/10 backdrop-blur-sm border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-sm border border-purple-300/20;
+  }
+
+  /* Responsive text utilities */
+  .text-responsive-xs {
+    @apply text-xs sm:text-sm;
+  }
+
+  .text-responsive-sm {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-responsive-base {
+    @apply text-base sm:text-lg;
+  }
+
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl;
+  }
+
+  .text-responsive-2xl {
+    @apply text-2xl sm:text-3xl;
+  }
+
+  .text-responsive-3xl {
+    @apply text-3xl sm:text-4xl;
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px rgba(147, 51, 234, 0.5), 0 0 20px rgba(147, 51, 234, 0.5), 0 0 30px rgba(147, 51, 234, 0.5);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(147, 51, 234, 0.8), 0 0 30px rgba(147, 51, 234, 0.8), 0 0 40px rgba(147, 51, 234, 0.8);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(147, 51, 234, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(147, 51, 234, 0.7);
+}
+
+/* Selection styling */
+::selection {
+  background-color: rgba(147, 51, 234, 0.3);
+  color: white;
+}
+
+/* Focus visible improvements */
+.focus-visible-improved:focus-visible {
+  outline: 2px solid rgba(147, 51, 234, 0.8);
+  outline-offset: 2px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    @apply hidden;
+  }
+
+  .mobile-full {
+    @apply w-full;
+  }
+
+  .mobile-stack {
+    @apply flex-col;
+  }
+
+  .mobile-center {
+    @apply text-center;
+  }
+
+  .mobile-p-4 {
+    @apply p-4;
+  }
+
+  .mobile-text-sm {
+    @apply text-sm;
+  }
+}
+
+/* Dark mode improvements */
+@media (prefers-color-scheme: dark) {
+  .auto-dark {
+    @apply bg-slate-900 text-white;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin,
+  .animate-pulse,
+  .animate-bounce,
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-bounce-in,
+  .animate-glow {
+    animation: none;
+  }
+
+  .transition-all,
+  .transition-colors,
+  .transition-transform {
+    transition: none;
+  }
+}
